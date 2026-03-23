@@ -51,6 +51,14 @@ def get_top_similar_books(book_title, n=10):
 def get_book_suggestions(input_text):
     return final_filtered_df[final_filtered_df['title'].str.contains(input_text, case=False, na=False)]['title'].unique().tolist()
 
+# Initialize session state for recommendations
+if 'recommendations' not in st.session_state:
+    st.session_state.recommendations = None
+if 'recommended_book' not in st.session_state:
+    st.session_state.recommended_book = None
+if 'recommended_num' not in st.session_state:
+    st.session_state.recommended_num = None
+
 # Streamlit app
 st.title('Book Recommendation System')
 
@@ -133,72 +141,64 @@ st.markdown("""
 st.markdown("<p class='subheader'>Let Us Help You Choose Your Next Book!</p>", unsafe_allow_html=True)
 st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
 
-# Initialize session state variables to hold recommendation status
-if 'show_recommendations' not in st.session_state:
-    st.session_state.show_recommendations = False
-    st.session_state.target_book = ""
-    st.session_state.target_num = 10
-
-# All books for autocomplete
+# Create a selectbox for book title with autocomplete
 all_books = final_filtered_df['title'].unique().tolist()
+book_title = st.selectbox('Enter a book title:', [''] + all_books, key='book_title')
 
-# Wrap inputs in a form to prevent any loading/rerunning until the submit button is clicked
-with st.form(key='book_form'):
-    book_title = st.selectbox('Enter a book title:', [''] + all_books)
-    num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
-    
-    # The form submit button acts as the main trigger
-    submit_button = st.form_submit_button(label='Recommend books')
+num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
 
-# When button is clicked, update session state with current inputs
-if submit_button:
-    st.session_state.show_recommendations = True
-    st.session_state.target_book = book_title
-    st.session_state.target_num = num_recommendations
-
-# Display recommendations using the variables stored in session state
-if st.session_state.show_recommendations:
-    rec_book = st.session_state.target_book
-    rec_num = st.session_state.target_num
-    
-    if rec_book and rec_book != '':
-        similar_books = get_top_similar_books(rec_book, rec_num)
-        if isinstance(similar_books, str):
-            st.write(similar_books)
-        else:
-            st.markdown(f"<div style='font-size:15px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
-            st.write("")
-            
-            # Display books in rows with images, horizontal and vertical lines
-            for i in range(0, len(similar_books), 3):
-                cols = st.columns(3)
-                for j in range(3):
-                    if i + j < len(similar_books):
-                        book = similar_books.index[i + j]
-                        book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
-                        with cols[j]:
-                            st.markdown(f"""
-                            <div class='book-column'>
-                                <div class='book-info'>
-                                    <strong>{i + j + 1}. {book}</strong><br>
-                                    <div class='author-info' style='margin-left: 10px;'>by {book_info['Book-Author']}</div>
-                                    <div class='year-info'>{book_info['Year-Of-Publication']}</div>
-                                </div>
-                                <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
-                                {'' if j == 2 else '<div class="column-divider"></div>'}
-                            </div>
-                            """, unsafe_allow_html=True)
-                if i < len(similar_books) - 3:
-                    st.markdown("<br>", unsafe_allow_html=True)  # Line space above horizontal line
-                    st.markdown("<hr>", unsafe_allow_html=True)  # Horizontal line between rows
-                    st.markdown("<br>", unsafe_allow_html=True)  # Line space below horizontal line
-
-            # Add extra space between books and final image
-            st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
-            st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
-            
-            # Display the final images
-            st.image('https://theweekjunior.co.uk/sites/default/files/inline-images/DM-596_TWJ_Landing_page_text_02.png', use_container_width=True)
-            st.image('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHV3M2w0bW9mMnNzeG05NTBzcjFzc29uY21yeWw1aXhnZm40bzlleSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wIVA0zh5pt0G5YtcAL/giphy.webp', use_container_width=True)
+if st.button('Recommend books'):
+    if book_title and book_title != '':
+        similar_books = get_top_similar_books(book_title, num_recommendations)
+        st.session_state.recommendations = similar_books
+        st.session_state.recommended_book = book_title
+        st.session_state.recommended_num = num_recommendations
     else:
+        st.session_state.recommendations = None
+        st.session_state.recommended_book = None
+        st.session_state.recommended_num = None
         st.write("Please enter a book title.")
+
+# Display recommendations from session state
+if st.session_state.recommendations is not None:
+    similar_books = st.session_state.recommendations
+    rec_book = st.session_state.recommended_book
+    rec_num = st.session_state.recommended_num
+
+    if isinstance(similar_books, str):
+        st.write(similar_books)
+    else:
+        st.markdown(f"<div style='font-size:15px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
+        st.write("")
+        
+        # Display books in rows with images, horizontal and vertical lines
+        for i in range(0, len(similar_books), 3):
+            cols = st.columns(3)
+            for j in range(3):
+                if i + j < len(similar_books):
+                    book = similar_books.index[i + j]
+                    book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
+                    with cols[j]:
+                        st.markdown(f"""
+                        <div class='book-column'>
+                            <div class='book-info'>
+                                <strong>{i + j + 1}. {book}</strong><br>
+                                <div class='author-info' style='margin-left: 10px;'>by {book_info['Book-Author']}</div>
+                                <div class='year-info'>{book_info['Year-Of-Publication']}</div>
+                            </div>
+                            <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
+                            {'' if j == 2 else '<div class="column-divider"></div>'}
+                        </div>
+                        """, unsafe_allow_html=True)
+            if i < len(similar_books) - 3:
+                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("<hr>", unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
+
+        # Add extra space between books and final image
+        st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
+        st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
+        
+        # Display the final images
+        st.image('https://theweekjunior.co.uk/sites/default/files/inline-images/DM-596_TWJ_Landing_page_text_02.png', use_container_width=True)
+        st.image('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHV3M2w0bW9mMnNzeG05NTBzcjFzc29uY21yeWw1aXhnZm40bzlleSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wIVA0zh5pt0G5YtcAL/giphy.webp', use_container_width=True)
