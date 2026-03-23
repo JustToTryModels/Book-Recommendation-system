@@ -6,34 +6,40 @@ from sklearn.metrics.pairwise import cosine_similarity
 import warnings
 warnings.filterwarnings('ignore')
 
-# Load your final filtered dataframe
-final_filtered_df = pd.read_csv('final_filtered_df.csv')
+@st.cache_data
+def load_and_prepare_data():
+    # Load your final filtered dataframe
+    final_filtered_df = pd.read_csv('final_filtered_df.csv')
 
-# Load the dataframe containing book URLs
-book_urls_df = pd.read_csv("Books.csv")
-book_urls_df.rename(columns={'Book-Title': 'title'}, inplace=True)
+    # Load the dataframe containing book URLs
+    book_urls_df = pd.read_csv("Books.csv")
+    book_urls_df.rename(columns={'Book-Title': 'title'}, inplace=True)
 
-# Merge the dataframes on the title
-final_filtered_df = final_filtered_df.merge(book_urls_df, on='title', how='left')
+    # Merge the dataframes on the title
+    final_filtered_df = final_filtered_df.merge(book_urls_df, on='title', how='left')
 
-# URL to replace
-url1 = 'http://images.amazon.com/images/P/0690040784.01.LZZZZZZZ.jpg'
-url2 = 'http://images.amazon.com/images/P/0451172817.01.LZZZZZZZ.jpg'
-url3 = 'http://images.amazon.com/images/P/0312084986.01.LZZZZZZZ.jpg'
-url4 = 'http://images.amazon.com/images/P/1590400356.01.LZZZZZZZ.jpg'
+    # URL to replace
+    url1 = 'http://images.amazon.com/images/P/0690040784.01.LZZZZZZZ.jpg'
+    url2 = 'http://images.amazon.com/images/P/0451172817.01.LZZZZZZZ.jpg'
+    url3 = 'http://images.amazon.com/images/P/0312084986.01.LZZZZZZZ.jpg'
+    url4 = 'http://images.amazon.com/images/P/1590400356.01.LZZZZZZZ.jpg'
 
-# Replace URL based on condition
-final_filtered_df.loc[final_filtered_df['title'] == 'Jacob Have I Loved', 'Image-URL-L'] = url1
-final_filtered_df.loc[final_filtered_df['title'] == 'Needful Things', 'Image-URL-L'] = url2
-final_filtered_df.loc[final_filtered_df['title'] == 'All Creatures Great and Small', 'Image-URL-L'] = url3
-final_filtered_df.loc[final_filtered_df['title'] == "The Kitchen God's Wife", 'Image-URL-L'] = url4
+    # Replace URL based on condition
+    final_filtered_df.loc[final_filtered_df['title'] == 'Jacob Have I Loved', 'Image-URL-L'] = url1
+    final_filtered_df.loc[final_filtered_df['title'] == 'Needful Things', 'Image-URL-L'] = url2
+    final_filtered_df.loc[final_filtered_df['title'] == 'All Creatures Great and Small', 'Image-URL-L'] = url3
+    final_filtered_df.loc[final_filtered_df['title'] == "The Kitchen God's Wife", 'Image-URL-L'] = url4
 
-# Create the book-user matrix
-book_user_mat = final_filtered_df.pivot_table(index='title', columns='userId', values='rating').fillna(0)
+    # Create the book-user matrix
+    book_user_mat = final_filtered_df.pivot_table(index='title', columns='userId', values='rating').fillna(0)
 
-# Calculate the cosine similarity matrix
-cosine_sim = cosine_similarity(book_user_mat)
-cosine_sim_df = pd.DataFrame(cosine_sim, index=book_user_mat.index, columns=book_user_mat.index)
+    # Calculate the cosine similarity matrix
+    cosine_sim = cosine_similarity(book_user_mat)
+    cosine_sim_df = pd.DataFrame(cosine_sim, index=book_user_mat.index, columns=book_user_mat.index)
+
+    return final_filtered_df, cosine_sim_df
+
+final_filtered_df, cosine_sim_df = load_and_prepare_data()
 
 def get_top_similar_books(book_title, n=10):
     # Check if the book and user exist in our data
@@ -50,6 +56,14 @@ def get_top_similar_books(book_title, n=10):
 # Function to get book suggestions based on user input
 def get_book_suggestions(input_text):
     return final_filtered_df[final_filtered_df['title'].str.contains(input_text, case=False, na=False)]['title'].unique().tolist()
+
+# Initialize session state for recommendations
+if 'recommendations' not in st.session_state:
+    st.session_state.recommendations = None
+if 'recommended_book' not in st.session_state:
+    st.session_state.recommended_book = None
+if 'recommended_num' not in st.session_state:
+    st.session_state.recommended_num = None
 
 # Streamlit app
 st.title('Book Recommendation System')
@@ -133,42 +147,34 @@ st.markdown("""
 st.markdown("<p class='subheader'>Let Us Help You Choose Your Next Book!</p>", unsafe_allow_html=True)
 st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
 
-# Initialize session state parameters to persist recommendations across interactions
-if 'show_recommendations' not in st.session_state:
-    st.session_state.show_recommendations = False
-if 'rec_book_title' not in st.session_state:
-    st.session_state.rec_book_title = ""
-if 'rec_num' not in st.session_state:
-    st.session_state.rec_num = 10
-
+# Create a selectbox for book title with autocomplete
 all_books = final_filtered_df['title'].unique().tolist()
+book_title = st.selectbox('Enter a book title:', [''] + all_books, key='book_title')
 
-# Wrap the inputs in a form to stop the app from loading/rerunning until the button is clicked
-with st.form(key='recommendation_form'):
-    # Create a selectbox for book title with autocomplete
-    book_title = st.selectbox('Enter a book title:', [''] + all_books)
-    num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
-    
-    # Form submit button acts as the main trigger
-    submit_button = st.form_submit_button(label='Recommend books')
+num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
 
-if submit_button:
+if st.button('Recommend books'):
     if book_title and book_title != '':
-        # Update session state with the new choices when button is clicked
-        st.session_state.show_recommendations = True
-        st.session_state.rec_book_title = book_title
-        st.session_state.rec_num = num_recommendations
+        similar_books = get_top_similar_books(book_title, num_recommendations)
+        st.session_state.recommendations = similar_books
+        st.session_state.recommended_book = book_title
+        st.session_state.recommended_num = num_recommendations
     else:
-        st.session_state.show_recommendations = False
+        st.session_state.recommendations = None
+        st.session_state.recommended_book = None
+        st.session_state.recommended_num = None
         st.write("Please enter a book title.")
 
-# Display results based on session state
-if st.session_state.show_recommendations:
-    similar_books = get_top_similar_books(st.session_state.rec_book_title, st.session_state.rec_num)
+# Display recommendations from session state
+if st.session_state.recommendations is not None:
+    similar_books = st.session_state.recommendations
+    rec_book = st.session_state.recommended_book
+    rec_num = st.session_state.recommended_num
+
     if isinstance(similar_books, str):
         st.write(similar_books)
     else:
-        st.markdown(f"<div style='font-size:15px;'>Top {st.session_state.rec_num} recommendations for '<strong>{st.session_state.rec_book_title}</strong>':</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size:15px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
         st.write("")
         
         # Display books in rows with images, horizontal and vertical lines
@@ -191,9 +197,9 @@ if st.session_state.show_recommendations:
                         </div>
                         """, unsafe_allow_html=True)
             if i < len(similar_books) - 3:
-                st.markdown("<br>", unsafe_allow_html=True)  # Line space above horizontal line
-                st.markdown("<hr>", unsafe_allow_html=True)  # Horizontal line between rows
-                st.markdown("<br>", unsafe_allow_html=True)  # Line space below horizontal line
+                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("<hr>", unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
 
         # Add extra space between books and final image
         st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
