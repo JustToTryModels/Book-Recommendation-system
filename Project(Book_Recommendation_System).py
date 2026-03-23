@@ -113,6 +113,7 @@ st.markdown("""
     .year-info {
         font-size: 11px;
         margin-top: 3px;
+        margin-left: 10px;
         color: #777;
     }
     img {
@@ -132,6 +133,7 @@ st.markdown("""
         margin-bottom: 25px !important;
         opacity: 1 !important;
     }
+    /* Updated .book-column for frame styling */
     .book-column {
         position: relative;
         padding: 20px;
@@ -149,26 +151,21 @@ st.markdown("""
     .extra-space {
         margin-top: 50px;
     }
-    
-    /* Green Circle Numbering Formatting */
-    .number-circle {
+    .number-badge {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 26px;
-        height: 26px;
+        width: 28px;
+        height: 28px;
         background-color: #4CAF50;
         color: white;
         border-radius: 50%;
-        font-size: 14px;
         font-weight: bold;
-        margin-right: 9px;
-        flex-shrink: 0;
+        font-size: 14px;
     }
-    .title-container {
-        display: flex;
-        align-items: flex-start;
-        margin-bottom: 6px;
+    .number-row {
+        text-align: center;
+        margin-bottom: 10px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -214,16 +211,15 @@ if st.session_state.recommendations is not None:
                     book = similar_books.index[i + j]
                     book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
                     with cols[j]:
-                        # Here is the HTML format explicitly adjusted for the Green circle
                         st.markdown(f"""
                         <div class='book-column'>
+                            <div class='number-row'>
+                                <span class='number-badge'>{i + j + 1}</span>
+                            </div>
                             <div class='book-info'>
-                                <div class='title-container'>
-                                    <span class='number-circle'>{i + j + 1}</span>
-                                    <strong style='margin-top:2px;'>{book}</strong>
-                                </div>
-                                <div class='author-info' style='margin-left: 35px;'>by {book_info['Book-Author']}</div>
-                                <div class='year-info' style='margin-left: 35px;'>{book_info['Year-Of-Publication']}</div>
+                                <strong>{book}</strong><br>
+                                <div class='author-info' style='margin-left: 10px;'>by {book_info['Book-Author']}</div>
+                                <div class='year-info'>{book_info['Year-Of-Publication']}</div>
                             </div>
                             <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                         </div>
