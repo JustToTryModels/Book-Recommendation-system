@@ -128,7 +128,7 @@ st.markdown("""
     }
     hr {
         border: none !important;
-        border-top: 1px solid #333 !important;
+        border-top: 1.5px solid #333 !important;
         margin-top: 25px !important;
         margin-bottom: 25px !important;
         opacity: 1 !important;
