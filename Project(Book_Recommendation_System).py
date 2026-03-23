@@ -77,7 +77,7 @@ st.markdown("""
         margin-bottom: 20px;
         color: #1a73e8;
     }
-    .stButton button {
+    .stButton > button {
         font-family: 'Courier New', Courier, monospace;
         font-size: 16px;
         background-color: #4CAF50;
@@ -90,8 +90,14 @@ st.markdown("""
         margin: 4px 2px;
         cursor: pointer;
     }
-    .stButton button:hover {
+    .stButton > button:hover {
         background-color: #45a049;
+    }
+    .stSelectbox > div > div {
+        font-size: 14px;
+    }
+    .stNumberInput > div > div > input {
+        font-size: 14px;
     }
     .book-info {
         line-height: 1.2;
@@ -110,7 +116,7 @@ st.markdown("""
         margin-left: 10px;
         color: #777;
     }
-    .book-column img {
+    img {
         object-fit: contain;
         max-height: 300px;
         width: auto;
