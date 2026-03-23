@@ -110,7 +110,7 @@ st.markdown("""
         margin-left: 10px;
         color: #777;
     }
-    img {
+    .book-column img {
         object-fit: contain;
         max-height: 300px;
         width: auto;
