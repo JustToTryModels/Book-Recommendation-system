@@ -230,6 +230,7 @@ if st.session_state.recommendations is not None:
         # Add extra space between books and final image
         st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
         st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
-        
-        # Display the final images
-        st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
+
+
+# Display the final images
+st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
