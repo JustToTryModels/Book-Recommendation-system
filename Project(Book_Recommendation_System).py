@@ -141,13 +141,15 @@ st.markdown("""
 st.markdown("<p class='subheader'>Let Us Help You Choose Your Next Book!</p>", unsafe_allow_html=True)
 st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
 
-# Create a selectbox for book title with autocomplete
+# Create a form so that selecting a book doesn't trigger a rerun
 all_books = final_filtered_df['title'].unique().tolist()
-book_title = st.selectbox('Enter a book title:', [''] + all_books, key='book_title')
 
-num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
+with st.form(key='recommendation_form'):
+    book_title = st.selectbox('Enter a book title:', [''] + all_books, key='book_title')
+    num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
+    submit_button = st.form_submit_button('Recommend books')
 
-if st.button('Recommend books'):
+if submit_button:
     if book_title and book_title != '':
         similar_books = get_top_similar_books(book_title, num_recommendations)
         st.session_state.recommendations = similar_books
