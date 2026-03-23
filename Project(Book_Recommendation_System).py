@@ -126,10 +126,9 @@ st.markdown("""
     .spacer {
         margin-bottom: 15px;
     }
-    .row-divider {
+    hr {
         border: none !important;
-        height: 4px !important;
-        background-color: #000000 !important;
+        border-top: 3px solid #333 !important;
         margin-top: 25px !important;
         margin-bottom: 25px !important;
         opacity: 1 !important;
@@ -208,7 +207,7 @@ if st.session_state.recommendations is not None:
                         """, unsafe_allow_html=True)
             if i < len(similar_books) - 3:
                 st.markdown("<br>", unsafe_allow_html=True)
-                st.markdown("<div class='row-divider'></div>", unsafe_allow_html=True)
+                st.markdown("<hr>", unsafe_allow_html=True)
                 st.markdown("<br>", unsafe_allow_html=True)
 
         # Add extra space between books and final image
