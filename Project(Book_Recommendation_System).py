@@ -99,75 +99,70 @@ st.markdown("""
     .stNumberInput > div > div > input {
         font-size: 14px;
     }
-    .book-card {
-        background: linear-gradient(145deg, #ffffff, #f5f5f5);
-        border: 2px solid #ddd;
-        border-radius: 12px;
-        padding: 15px;
-        margin: 10px 5px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-        transition: transform 0.2s, box-shadow 0.2s;
-        height: 100%;
-        min-height: 420px;
-    }
-    .book-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .book-number {
-        background: linear-gradient(135deg, #4CAF50, #45a049);
-        color: white;
-        font-size: 14px;
-        font-weight: bold;
-        padding: 5px 12px;
-        border-radius: 20px;
-        display: inline-block;
-        margin-bottom: 10px;
-    }
-    .book-title-card {
-        font-size: 15px;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 8px;
-        line-height: 1.3;
-        min-height: 40px;
-    }
-    .author-info {
-        font-size: 13px;
-        color: #666;
-        margin-bottom: 5px;
-    }
-    .year-info {
-        font-size: 12px;
-        color: #888;
+    .book-info {
+        line-height: 1.2;
         margin-bottom: 15px;
     }
-    .book-image-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 10px;
-        background-color: #fafafa;
-        border-radius: 8px;
-        border: 1px solid #eee;
+    .book-title {
+        margin-bottom: 30px;
     }
-    .book-image-container img {
-        max-height: 250px;
-        width: auto;
+    .author-info {
+        margin-top: 5px;
+        font-size: 12px;
+    }
+    .year-info {
+        font-size: 11px;
+        margin-top: 3px;
+        margin-left: 10px;
+        color: #777;
+    }
+    img {
         object-fit: contain;
-        border-radius: 4px;
+        max-height: 300px;
+        width: auto;
+        display: block;
+        margin: 0 auto;
     }
     .spacer {
         margin-bottom: 15px;
     }
-    .row-divider {
-        border: 0;
-        height: 1px;
-        background: linear-gradient(to right, transparent, #ccc, transparent);
-        margin: 25px 0;
+    hr {
+        border: none !important;
+        border-top: 10px solid #333 !important;
+        margin-top: 25px !important;
+        margin-bottom: 25px !important;
+        opacity: 1 !important;
+    }
+    /* Updated .book-column for frame styling */
+    .book-column {
+        position: relative;
+        padding: 20px;
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        background-color: rgba(128, 128, 128, 0.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 15px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .book-column:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
     .extra-space {
         margin-top: 50px;
+    }
+    .number-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 50%;
+        font-weight: bold;
+        font-size: 14px;
+        margin-right: 8px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -205,7 +200,7 @@ if st.session_state.recommendations is not None:
         st.markdown(f"<div style='font-size:15px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
         st.write("")
         
-        # Display books in rows with images in card format
+        # Display books in rows with images, horizontal lines, and framed sections
         for i in range(0, len(similar_books), 3):
             cols = st.columns(3)
             for j in range(3):
@@ -214,18 +209,19 @@ if st.session_state.recommendations is not None:
                     book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
                     with cols[j]:
                         st.markdown(f"""
-                        <div class='book-card'>
-                            <div class='book-number'>{i + j + 1}</div>
-                            <div class='book-title-card'>{book}</div>
-                            <div class='author-info'>✍️ {book_info['Book-Author']}</div>
-                            <div class='year-info'>📅 {book_info['Year-Of-Publication']}</div>
-                            <div class='book-image-container'>
-                                <img src='{book_info['Image-URL-L']}'>
+                        <div class='book-column'>
+                            <div class='book-info'>
+                                <span class='number-badge'>{i + j + 1}</span><strong>{book}</strong><br>
+                                <div class='author-info' style='margin-left: 10px;'>by {book_info['Book-Author']}</div>
+                                <div class='year-info'>{book_info['Year-Of-Publication']}</div>
                             </div>
+                            <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                         </div>
                         """, unsafe_allow_html=True)
             if i < len(similar_books) - 3:
-                st.markdown("<hr class='row-divider'>", unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("<hr>", unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
 
         # Add extra space between books and final image
         st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
