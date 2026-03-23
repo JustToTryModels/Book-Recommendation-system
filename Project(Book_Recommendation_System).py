@@ -162,13 +162,13 @@ if st.button('Recommend books'):
 # Display recommendations from session state
 if st.session_state.recommendations is not None:
     similar_books = st.session_state.recommendations
-    rec_book_title = st.session_state.recommended_book_title
-    rec_num = st.session_state.recommended_num
+    recommended_title = st.session_state.recommended_book_title
+    recommended_num = st.session_state.recommended_num
     
     if isinstance(similar_books, str):
         st.write(similar_books)
     else:
-        st.markdown(f"<div style='font-size:15px;'>Top {rec_num} recommendations for '<strong>{rec_book_title}</strong>':</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size:15px;'>Top {recommended_num} recommendations for '<strong>{recommended_title}</strong>':</div>", unsafe_allow_html=True)
         st.write("")
         
         # Display books in rows with images, horizontal and vertical lines
