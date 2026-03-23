@@ -151,22 +151,6 @@ st.markdown("""
     .extra-space {
         margin-top: 50px;
     }
-    .number-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        background-color: #4CAF50;
-        color: white;
-        border-radius: 50%;
-        font-weight: bold;
-        font-size: 14px;
-    }
-    .number-row {
-        text-align: center;
-        margin-bottom: 10px;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -213,11 +197,8 @@ if st.session_state.recommendations is not None:
                     with cols[j]:
                         st.markdown(f"""
                         <div class='book-column'>
-                            <div class='number-row'>
-                                <span class='number-badge'>{i + j + 1}</span>
-                            </div>
                             <div class='book-info'>
-                                <strong>{book}</strong><br>
+                                <strong>{i + j + 1}. {book}</strong><br>
                                 <div class='author-info' style='margin-left: 10px;'>by {book_info['Book-Author']}</div>
                                 <div class='year-info'>{book_info['Year-Of-Publication']}</div>
                             </div>
