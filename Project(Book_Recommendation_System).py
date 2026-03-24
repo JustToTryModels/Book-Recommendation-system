@@ -66,11 +66,18 @@ if 'recommended_num' not in st.session_state:
     st.session_state.recommended_num = None
 
 # Streamlit app
+# The size of this title is now controlled by the CSS block below
 st.title('Book Recommendation System')
 
 # Define CSS for button styles and other formatting tweaks
 st.markdown("""
     <style>
+    /* Control the main title size (h1) */
+    h1 {
+        font-size: 36px !important;
+        font-weight: bold;
+        color: #333;
+    }
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
