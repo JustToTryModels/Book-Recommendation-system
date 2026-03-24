@@ -52,40 +52,36 @@ def get_top_similar_books(book_title, n=10):
 # Streamlit app
 st.title('Book Recommendation System')
 
-# Updated CSS with Horizontal Scrolling for Titles
+# Updated CSS: Applied Sans-Serif globally and kept horizontal title scrolling
 st.markdown("""
     <style>
-    html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
-        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
+    /* Global Sans-Serif Font Style */
+    html, body, [class*="css"], [class*="st-"], .stMarkdown, p, div, span, label, input, button, select {
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
     }
+    
     .subheader {
         font-size: 22px;
         font-weight: bold;
         margin-bottom: 20px;
         color: #1a73e8;
     }
+    
     .stButton > button {
-        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
         font-size: 16px;
         background-color: #4CAF50;
         color: white !important;
         border: none;
         padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        margin: 4px 2px;
+        border-radius: 8px;
         cursor: pointer;
     }
+    
     .stButton > button:hover {
         background-color: #45a049;
     }
-    .book-info {
-        line-height: 1.2;
-        margin-bottom: 15px;
-    }
-    
-    /* NEW: Horizontal Scroll styling for the Title */
+
+    /* Horizontal Scroll for long book titles */
     .scroll-title {
         display: block;
         font-size: 16px;
@@ -94,10 +90,12 @@ st.markdown("""
         overflow-x: auto;
         padding-bottom: 5px;
         margin-bottom: 5px;
+        scrollbar-width: thin; /* Firefox */
     }
-    /* Styling the scrollbar for the title */
+    
+    /* Scrollbar styling for Chrome/Safari/Edge */
     .scroll-title::-webkit-scrollbar {
-        height: 6px;
+        height: 4px;
     }
     .scroll-title::-webkit-scrollbar-thumb {
         background: #ccc;
@@ -107,13 +105,16 @@ st.markdown("""
     .author-info {
         margin-top: 5px;
         font-size: 12px;
+        color: #555;
     }
+    
     .year-info {
         font-size: 11px;
         margin-top: 3px;
         margin-left: 10px;
-        color: #777;
+        color: #888;
     }
+
     img {
         object-fit: contain;
         max-height: 300px;
@@ -121,27 +122,30 @@ st.markdown("""
         display: block;
         margin: 0 auto;
     }
+
     hr {
         border: none !important;
-        border-top: 10px solid #333 !important;
-        margin-top: 25px !important;
-        margin-bottom: 25px !important;
+        border-top: 8px solid #333 !important;
+        margin: 25px 0 !important;
         opacity: 1 !important;
     }
+
     .book-column {
         position: relative;
         padding: 20px;
-        border: 2px solid #ddd;
+        border: 1px solid #ddd;
         border-radius: 12px;
-        background-color: rgba(128, 128, 128, 0.05);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fdfdfd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         margin-bottom: 15px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: transform 0.2s ease;
     }
+    
     .book-column:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
+
     .extra-space {
         margin-top: 50px;
     }
@@ -171,7 +175,7 @@ if st.button('Recommend books'):
         st.session_state.recommended_num = num_recommendations
     else:
         st.session_state.recommendations = None
-        st.write("Please enter a book title.")
+        st.warning("Please enter a book title.")
 
 if st.session_state.recommendations is not None:
     similar_books = st.session_state.recommendations
@@ -179,10 +183,9 @@ if st.session_state.recommendations is not None:
     rec_num = st.session_state.recommended_num
 
     if isinstance(similar_books, str):
-        st.write(similar_books)
+        st.error(similar_books)
     else:
-        st.markdown(f"<div style='font-size:15px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
-        st.write("")
+        st.markdown(f"<div style='font-size:15px; margin-bottom:10px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
         
         for i in range(0, len(similar_books), 3):
             cols = st.columns(3)
@@ -195,14 +198,14 @@ if st.session_state.recommendations is not None:
                         <div class='book-column'>
                             <div class='book-info'>
                                 <div class='scroll-title'>{i + j + 1}. {book}</div>
-                                <div class='author-info' style='margin-left: 10px;'>by {book_info['Book-Author']}</div>
+                                <div class='author-info'>by {book_info['Book-Author']}</div>
                                 <div class='year-info'>{book_info['Year-Of-Publication']}</div>
                             </div>
-                            <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
+                            <img src='{book_info['Image-URL-L']}'>
                         </div>
                         """, unsafe_allow_html=True)
             if i < len(similar_books) - 3:
-                st.markdown("<br><hr><br>", unsafe_allow_html=True)
+                st.markdown("<hr>", unsafe_allow_html=True)
 
-        st.markdown("<div class='extra-space'></div><div class='extra-space'></div>", unsafe_allow_html=True)
+        st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
         st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
