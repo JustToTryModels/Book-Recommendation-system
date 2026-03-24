@@ -154,6 +154,34 @@ st.markdown("""
     .extra-space {
         margin-top: 50px;
     }
+    
+    /* Marquee scrolling effect for book titles */
+    .title-marquee-container {
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+        position: relative;
+    }
+    
+    .title-marquee-text {
+        display: inline-block;
+        padding-left: 0;
+        animation: marquee-scroll 8s linear infinite;
+        animation-play-state: running;
+    }
+    
+    .title-marquee-container:hover .title-marquee-text {
+        animation-play-state: paused;
+    }
+    
+    @keyframes marquee-scroll {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -203,7 +231,9 @@ if st.session_state.recommendations is not None:
                         st.markdown(f"""
                         <div class='book-column'>
                             <div class='book-info'>
-                                <strong>{i + j + 1}. {book}</strong><br>
+                                <div class='title-marquee-container'>
+                                    <strong class='title-marquee-text'>{i + j + 1}. {book}</strong>
+                                </div>
                                 <div class='author-info' style='margin-left: 10px;'>by {book_info['Book-Author']}</div>
                                 <div class='year-info'>{book_info['Year-Of-Publication']}</div>
                             </div>
