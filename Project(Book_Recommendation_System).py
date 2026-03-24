@@ -159,12 +159,12 @@ st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.
 
 # Create a selectbox for book title with autocomplete
 all_books = final_filtered_df['title'].unique().tolist()
-book_title = st.selectbox('Enter a book title:', [''] + all_books, key='book_title')
+book_title = st.selectbox('Enter a book title:', ['Choose or type a book title'] + all_books, index=0, key='book_title')
 
 num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
 
 if st.button('Recommend books'):
-    if book_title and book_title != '':
+    if book_title and book_title != '' and book_title != 'Choose or type a book title':
         similar_books = get_top_similar_books(book_title, num_recommendations)
         st.session_state.recommendations = similar_books
         st.session_state.recommended_book = book_title
