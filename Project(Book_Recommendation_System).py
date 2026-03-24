@@ -206,6 +206,3 @@ if st.session_state.recommendations is not None:
 
         st.markdown("<div class='extra-space'></div><div class='extra-space'></div>", unsafe_allow_html=True)
         st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
-
-
-What is that controlling the Size of the book titles in manual title entering section and also in the drop down section?
