@@ -66,19 +66,29 @@ st.markdown("""
     }
     .stButton > button {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
-        font-size: 16px;
-        background-color: #4CAF50;
+        background: linear-gradient(90deg, #ff8a00, #e52e71);
         color: white !important;
         border: none;
+        border-radius: 25px;
         padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        margin: 4px 2px;
+        font-size: 1.2em !important;
+        font-weight: bold;
         cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 5px;
+        width: auto;
+        min-width: 100px;
     }
     .stButton > button:hover {
-        background-color: #45a049;
+        transform: scale(1.05);
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+        color: white !important;
+    }
+    .stButton > button:active {
+        transform: scale(0.98);
     }
     .book-info {
         line-height: 1.2;
