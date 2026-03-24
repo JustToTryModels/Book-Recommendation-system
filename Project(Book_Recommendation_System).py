@@ -43,7 +43,7 @@ final_filtered_df, cosine_sim_df = load_and_prepare_data()
 
 def get_top_similar_books(book_title, n=10):
     if book_title not in cosine_sim_df.index:
-        return "Book not found in the database."
+        return "⚠️ Book not found in the database."
     
     similar_scores = cosine_sim_df[book_title]
     similar_books = similar_scores.sort_values(ascending=False)[1:n+1]
@@ -181,7 +181,7 @@ if st.button('Recommend books'):
         st.session_state.recommended_num = num_recommendations
     else:
         st.session_state.recommendations = None
-        st.write("Please enter a book title.")
+        st.write("⚠️ Please select or enter a book title.")
 
 if st.session_state.recommendations is not None:
     similar_books = st.session_state.recommendations
