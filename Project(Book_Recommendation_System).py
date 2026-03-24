@@ -181,7 +181,7 @@ if st.button('Recommend books'):
         st.session_state.recommended_num = num_recommendations
     else:
         st.session_state.recommendations = None
-        st.write("⚠️ Please enter a book title.")
+        st.write("⚠️ Please select or enter a book title.")
 
 if st.session_state.recommendations is not None:
     similar_books = st.session_state.recommendations
