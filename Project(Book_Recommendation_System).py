@@ -52,21 +52,16 @@ def get_top_similar_books(book_title, n=10):
 # Streamlit app
 st.title('Book Recommendation System')
 
-# Updated CSS: Using Caslon for text and keeping horizontal title scrolling
+# Updated CSS: Applied Sans-Serif globally and kept horizontal title scrolling
 st.markdown("""
     <style>
-    /* Applying Caslon to the main content */
-    html, body, [class*="css"], [class*="st-"], .stMarkdown, p, div, span, label {
-        font-family: 'Caslon', 'Libre Caslon Text', 'Big Caslon', 'Book Antiqua', 'Georgia', serif !important;
-    }
-    
-    /* Keep buttons and inputs Sans-Serif for better UI readability */
-    button, input, select, textarea {
+    /* Global Sans-Serif Font Style */
+    html, body, [class*="css"], [class*="st-"], .stMarkdown, p, div, span, label, input, button, select {
         font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
     }
-
+    
     .subheader {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: bold;
         margin-bottom: 20px;
         color: #1a73e8;
@@ -89,35 +84,35 @@ st.markdown("""
     /* Horizontal Scroll for long book titles */
     .scroll-title {
         display: block;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: bold;
         white-space: nowrap;
         overflow-x: auto;
-        padding-bottom: 8px;
+        padding-bottom: 5px;
         margin-bottom: 5px;
+        scrollbar-width: thin; /* Firefox */
     }
     
     /* Scrollbar styling for Chrome/Safari/Edge */
     .scroll-title::-webkit-scrollbar {
-        height: 5px;
+        height: 4px;
     }
     .scroll-title::-webkit-scrollbar-thumb {
-        background: #bbb;
+        background: #ccc;
         border-radius: 10px;
     }
 
     .author-info {
         margin-top: 5px;
-        font-size: 14px;
-        font-style: italic;
-        color: #444;
+        font-size: 12px;
+        color: #555;
     }
     
     .year-info {
-        font-size: 12px;
+        font-size: 11px;
         margin-top: 3px;
         margin-left: 10px;
-        color: #777;
+        color: #888;
     }
 
     img {
@@ -130,29 +125,29 @@ st.markdown("""
 
     hr {
         border: none !important;
-        border-top: 6px solid #222 !important;
-        margin: 30px 0 !important;
+        border-top: 8px solid #333 !important;
+        margin: 25px 0 !important;
         opacity: 1 !important;
     }
 
     .book-column {
         position: relative;
         padding: 20px;
-        border: 1px solid #eee;
-        border-radius: 10px;
-        background-color: #ffffff;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        background-color: #fdfdfd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         margin-bottom: 15px;
         transition: transform 0.2s ease;
     }
     
     .book-column:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
 
     .extra-space {
-        margin-top: 60px;
+        margin-top: 50px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -180,7 +175,7 @@ if st.button('Recommend books'):
         st.session_state.recommended_num = num_recommendations
     else:
         st.session_state.recommendations = None
-        st.warning("Please select a book first.")
+        st.warning("Please enter a book title.")
 
 if st.session_state.recommendations is not None:
     similar_books = st.session_state.recommendations
@@ -190,7 +185,7 @@ if st.session_state.recommendations is not None:
     if isinstance(similar_books, str):
         st.error(similar_books)
     else:
-        st.markdown(f"<div style='font-size:16px; margin-bottom:15px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size:15px; margin-bottom:10px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
         
         for i in range(0, len(similar_books), 3):
             cols = st.columns(3)
