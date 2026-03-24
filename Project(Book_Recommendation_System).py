@@ -64,26 +64,21 @@ st.markdown("""
         margin-bottom: 20px;
         color: #1a73e8;
     }
-    /* Align button to the right */
-    div.stButton {
-        display: flex;
-        justify-content: flex-end;
-    }
     .stButton > button {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
-        font-size: 16px;
         background: linear-gradient(90deg, #ff8a00, #e52e71);
         color: white !important;
         border: none;
         border-radius: 25px;
         padding: 10px 20px;
+        font-size: 1.2em !important;
         font-weight: bold;
         cursor: pointer;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        margin: 4px 2px;
+        margin-top: 5px;
         width: auto;
         min-width: 100px;
     }
@@ -178,7 +173,11 @@ if 'recommended_book' not in st.session_state:
 if 'recommended_num' not in st.session_state:
     st.session_state.recommended_num = None
 
-if st.button('Recommend books'):
+_, _, button_col = st.columns([6, 1, 2])
+with button_col:
+    recommend_clicked = st.button('Recommend books')
+
+if recommend_clicked:
     if book_title:
         similar_books = get_top_similar_books(book_title, num_recommendations)
         st.session_state.recommendations = similar_books
