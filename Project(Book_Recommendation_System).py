@@ -159,14 +159,14 @@ st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.
 
 # Create a selectbox for book title with autocomplete
 all_books = final_filtered_df['title'].unique().tolist()
-# Updated default empty string to a helpful text prompt
-book_title = st.selectbox('Enter a book title:', ['Choose or enter a book title...'] + all_books, key='book_title')
+# Use index=None and placeholder to create a true informative hint that isn't a selectable value
+book_title = st.selectbox('Enter a book title:', all_books, index=None, placeholder="Choose or enter a book title...", key='book_title')
 
 num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
 
 if st.button('Recommend books'):
-    # Updated validation check to match the new default prompt text
-    if book_title and book_title != 'Choose or enter a book title...':
+    # Since index=None, book_title will be None if the user hasn't selected anything
+    if book_title:
         similar_books = get_top_similar_books(book_title, num_recommendations)
         st.session_state.recommendations = similar_books
         st.session_state.recommended_book = book_title
