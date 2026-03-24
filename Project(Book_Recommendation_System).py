@@ -68,17 +68,14 @@ if 'recommended_num' not in st.session_state:
 # Streamlit app
 st.title('Book Recommendation System')
 
-# Define CSS for Inter font and other styles
+# Define CSS for button styles and other formatting tweaks
 st.markdown("""
     <style>
-    /* Import Inter font from Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-    /* Apply Inter font globally */
-    html, body, [data-testid="stAppViewContainer"], div, span, h1, h2, h3, h4, h5, h6, p, a, strong, b, u, i, label, button, input, select, textarea {
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    
+    html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
         font-family: 'Inter', sans-serif !important;
     }
-    
     .subheader {
         font-size: 22px;
         font-weight: bold;
@@ -86,6 +83,7 @@ st.markdown("""
         color: #1a73e8;
     }
     .stButton > button {
+        font-family: 'Inter', sans-serif !important;
         font-size: 16px;
         background-color: #4CAF50;
         color: white !important;
@@ -96,7 +94,6 @@ st.markdown("""
         display: inline-block;
         margin: 4px 2px;
         cursor: pointer;
-        font-weight: 600;
     }
     .stButton > button:hover {
         background-color: #45a049;
@@ -141,6 +138,7 @@ st.markdown("""
         margin-bottom: 25px !important;
         opacity: 1 !important;
     }
+    /* Updated .book-column for frame styling */
     .book-column {
         position: relative;
         padding: 20px;
@@ -172,6 +170,7 @@ book_title = st.selectbox('Enter a book title:', all_books, index=None, placehol
 num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
 
 if st.button('Recommend books'):
+    # Since index=None, book_title will be None if the user hasn't selected anything
     if book_title:
         similar_books = get_top_similar_books(book_title, num_recommendations)
         st.session_state.recommendations = similar_books
@@ -195,6 +194,7 @@ if st.session_state.recommendations is not None:
         st.markdown(f"<div style='font-size:15px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
         st.write("")
         
+        # Display books in rows with images, horizontal lines, and framed sections
         for i in range(0, len(similar_books), 3):
             cols = st.columns(3)
             for j in range(3):
@@ -217,7 +217,9 @@ if st.session_state.recommendations is not None:
                 st.markdown("<hr>", unsafe_allow_html=True)
                 st.markdown("<br>", unsafe_allow_html=True)
 
+        # Add extra space between books and final image
         st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
         st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
         
+        # Display the final images
         st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
