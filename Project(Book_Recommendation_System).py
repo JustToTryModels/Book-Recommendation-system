@@ -106,13 +106,6 @@ st.markdown("""
         line-height: 1.2;
         margin-bottom: 15px;
     }
-    .book-title-container {
-        width: 100%;
-        overflow: hidden;
-        white-space: nowrap;
-        margin-bottom: 5px;
-        font-size: 16px;
-    }
     .book-title {
         margin-bottom: 30px;
     }
@@ -210,11 +203,7 @@ if st.session_state.recommendations is not None:
                         st.markdown(f"""
                         <div class='book-column'>
                             <div class='book-info'>
-                                <div class='book-title-container'>
-                                    <marquee behavior="scroll" direction="left" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();">
-                                        <strong>{i + j + 1}. {book}</strong>
-                                    </marquee>
-                                </div>
+                                <strong>{i + j + 1}. {book}</strong><br>
                                 <div class='author-info' style='margin-left: 10px;'>by {book_info['Book-Author']}</div>
                                 <div class='year-info'>{book_info['Year-Of-Publication']}</div>
                             </div>
@@ -232,3 +221,8 @@ if st.session_state.recommendations is not None:
         
         # Display the final images
         st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
+
+
+Some book titles are very long Which is making that book Section stretch Vertically compared to others in the same row I think it's mostly because of book title length So what I want you to do is do is instead of displaying the entire book length Multiple lines I want the book length should be displayed in a single line But very interactively like how we see The news is getting sideward scrolled in news channels at the bottom like that I want you to do the same for this.
+
+Fix that and give me the complete corrected code there is absolutely no need to make any other changes
