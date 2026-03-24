@@ -52,12 +52,9 @@ def get_top_similar_books(book_title, n=10):
 # Streamlit app
 st.title('Book Recommendation System')
 
-# Updated CSS with Horizontal Scrolling for Titles
+# Updated CSS: Removed Tiempos font, using Streamlit default
 st.markdown("""
     <style>
-    html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
-        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
-    }
     .subheader {
         font-size: 22px;
         font-weight: bold;
@@ -65,7 +62,6 @@ st.markdown("""
         color: #1a73e8;
     }
     .stButton > button {
-        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
         font-size: 16px;
         background-color: #4CAF50;
         color: white !important;
@@ -85,7 +81,7 @@ st.markdown("""
         margin-bottom: 15px;
     }
     
-    /* NEW: Horizontal Scroll styling for the Title */
+    /* Horizontal Scroll styling for the Title */
     .scroll-title {
         display: block;
         font-size: 16px;
