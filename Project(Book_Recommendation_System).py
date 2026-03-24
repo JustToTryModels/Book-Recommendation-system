@@ -52,32 +52,12 @@ def get_top_similar_books(book_title, n=10):
 # Streamlit app
 st.markdown("<h1 style='font-size: 40px;'>Book Recommendation System</h1>", unsafe_allow_html=True)
 
-# ✅ UPDATED CSS (only dropdown styling added)
+# Updated CSS with Horizontal Scrolling for Titles
 st.markdown("""
     <style>
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
-
-    /* 🔽 Dropdown text size fix */
-    div[data-baseweb="select"] {
-        font-size: 13px !important;
-    }
-
-    ul[role="listbox"] li {
-        font-size: 13px !important;
-        padding: 4px 8px !important;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    ul[role="listbox"] li:hover {
-        overflow: visible;
-        white-space: normal;
-        background-color: #f5f5f5;
-    }
-
     .subheader {
         font-size: 22px;
         font-weight: bold;
@@ -105,6 +85,7 @@ st.markdown("""
         margin-bottom: 15px;
     }
     
+    /* NEW: Horizontal Scroll styling for the Title */
     .scroll-title {
         display: block;
         font-size: 16px;
@@ -114,7 +95,7 @@ st.markdown("""
         padding-bottom: 5px;
         margin-bottom: 5px;
     }
-
+    /* Styling the scrollbar for the title */
     .scroll-title::-webkit-scrollbar {
         height: 6px;
     }
@@ -163,6 +144,18 @@ st.markdown("""
     }
     .extra-space {
         margin-top: 50px;
+    }
+
+    /* Reduced text size only in the selectbox typing area and dropdown options */
+    div[data-baseweb="select"] input {
+        font-size: 12px !important;
+    }
+    div[data-baseweb="select"] span {
+        font-size: 12px !important;
+    }
+    div[role="listbox"] div,
+    div[role="option"] {
+        font-size: 12px !important;
     }
     </style>
 """, unsafe_allow_html=True)
