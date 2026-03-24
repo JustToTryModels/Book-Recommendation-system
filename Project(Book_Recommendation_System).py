@@ -71,11 +71,9 @@ st.title('Book Recommendation System')
 # Define CSS for button styles and other formatting tweaks
 st.markdown("""
     <style>
-    /* Apply Tiempos font globally */
-    html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, strong, b, u, i, label, button, input, select, textarea {
-        font-family: 'Tiempos', serif !important;
+    html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
+        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
-    
     .subheader {
         font-size: 22px;
         font-weight: bold;
@@ -83,6 +81,7 @@ st.markdown("""
         color: #1a73e8;
     }
     .stButton > button {
+        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
         font-size: 16px;
         background-color: #4CAF50;
         color: white !important;
