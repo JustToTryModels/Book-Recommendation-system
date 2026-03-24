@@ -145,16 +145,19 @@ st.markdown("""
     .extra-space {
         margin-top: 50px;
     }
-
-    /* Reduced text size only in the selectbox typing area and dropdown options */
-    div[data-baseweb="select"] input {
-        font-size: 12px !important;
-    }
+    
+    /* Controls the selected value text size in the input box */
     div[data-baseweb="select"] span {
         font-size: 12px !important;
     }
-    div[role="listbox"] div,
-    div[role="option"] {
+    
+    /* Controls the dropdown option text size */
+    li[role="option"] span {
+        font-size: 12px !important;
+    }
+    
+    /* Controls the placeholder text size */
+    div[data-baseweb="select"] input::placeholder {
         font-size: 12px !important;
     }
     </style>
