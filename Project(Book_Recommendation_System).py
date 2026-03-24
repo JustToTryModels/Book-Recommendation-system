@@ -145,21 +145,6 @@ st.markdown("""
     .extra-space {
         margin-top: 50px;
     }
-    
-    /* Controls the selected value text size in the input box */
-    div[data-baseweb="select"] span {
-        font-size: 12px !important;
-    }
-    
-    /* Controls the dropdown option text size */
-    li[role="option"] span {
-        font-size: 12px !important;
-    }
-    
-    /* Controls the placeholder text size */
-    div[data-baseweb="select"] input::placeholder {
-        font-size: 12px !important;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -221,3 +206,6 @@ if st.session_state.recommendations is not None:
 
         st.markdown("<div class='extra-space'></div><div class='extra-space'></div>", unsafe_allow_html=True)
         st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
+
+
+What is that controlling the Size of the book titles in manual title entering section and also in the drop down section?
