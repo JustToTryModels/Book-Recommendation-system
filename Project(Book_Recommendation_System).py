@@ -52,22 +52,30 @@ def get_top_similar_books(book_title, n=10):
 # Streamlit app
 st.markdown("<h1 style='font-size: 40px;'>Book Recommendation System</h1>", unsafe_allow_html=True)
 
-# Updated CSS with Dropdown Text Sizing and List Height
+# ✅ UPDATED CSS (only dropdown styling added)
 st.markdown("""
     <style>
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
-    
-    /* NEW: Specific sizing and height for the Book Dropdown */
-    div[data-baseweb="select"] > div, 
-    div[role="listbox"] ul li {
-        font-size: 13px !important; 
+
+    /* 🔽 Dropdown text size fix */
+    div[data-baseweb="select"] {
+        font-size: 13px !important;
     }
-    
-    /* Increases the height of the dropdown menu to show more titles */
-    div[role="listbox"] ul {
-        max-height: 400px !important;
+
+    ul[role="listbox"] li {
+        font-size: 13px !important;
+        padding: 4px 8px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    ul[role="listbox"] li:hover {
+        overflow: visible;
+        white-space: normal;
+        background-color: #f5f5f5;
     }
 
     .subheader {
@@ -106,6 +114,7 @@ st.markdown("""
         padding-bottom: 5px;
         margin-bottom: 5px;
     }
+
     .scroll-title::-webkit-scrollbar {
         height: 6px;
     }
