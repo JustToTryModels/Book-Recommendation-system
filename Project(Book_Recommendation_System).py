@@ -149,7 +149,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("<p class='subheader'>Let Us Help You Choose Your Next Book!</p>", unsafe_allow_html=True)
-st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
+st.image('https://raw.githubusercontent.com/JustToTryModels/Book-Recommendation-system/refs/heads/main/bookcase-with-books_182089-197.avif', use_container_width=True)
 
 all_books = final_filtered_df['title'].unique().tolist()
 book_title = st.selectbox('Enter a book title:', all_books, index=None, placeholder="Choose or enter a book title...", key='book_title')
