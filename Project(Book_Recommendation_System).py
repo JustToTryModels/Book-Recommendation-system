@@ -71,10 +71,8 @@ st.title('Book Recommendation System')
 # Define CSS for button styles and other formatting tweaks
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-    
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
     .subheader {
         font-size: 22px;
@@ -83,7 +81,7 @@ st.markdown("""
         color: #1a73e8;
     }
     .stButton > button {
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
         font-size: 16px;
         background-color: #4CAF50;
         color: white !important;
