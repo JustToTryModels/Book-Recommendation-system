@@ -145,17 +145,6 @@ st.markdown("""
     .extra-space {
         margin-top: 50px;
     }
-    
-    /* Make selected value in selectbox bold */
-    .stSelectbox div[data-baseweb="select"] > div:first-child {
-        font-weight: bold !important;
-    }
-    
-    /* Keep dropdown list items normal weight */
-    .stSelectbox div[data-baseweb="popover"] li {
-        font-weight: normal !important;
-    }
-    
     </style>
 """, unsafe_allow_html=True)
 
