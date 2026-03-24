@@ -64,6 +64,23 @@ st.markdown("""
         margin-bottom: 20px;
         color: #1a73e8;
     }
+
+    /* Make the selected/entered book title in the selectbox bold */
+    div[data-baseweb="select"] span,
+    div[data-baseweb="select"] input {
+        font-weight: 700 !important;
+    }
+
+    /* Keep placeholder text normal */
+    div[data-baseweb="select"] input::placeholder {
+        font-weight: 400 !important;
+    }
+
+    /* Keep dropdown list options normal */
+    div[role="listbox"] * {
+        font-weight: 400 !important;
+    }
+
     .stButton > button {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
         font-size: 16px;
@@ -145,17 +162,6 @@ st.markdown("""
     .extra-space {
         margin-top: 50px;
     }
-    
-    /* Make selected value in selectbox bold */
-    .stSelectbox div[data-baseweb="select"] > div:first-child {
-        font-weight: bold !important;
-    }
-    
-    /* Keep dropdown list items normal weight */
-    .stSelectbox div[data-baseweb="popover"] li {
-        font-weight: normal !important;
-    }
-    
     </style>
 """, unsafe_allow_html=True)
 
