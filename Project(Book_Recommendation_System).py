@@ -64,6 +64,11 @@ st.markdown("""
         margin-bottom: 20px;
         color: #1a73e8;
     }
+    /* Align button to the right */
+    div.stButton {
+        display: flex;
+        justify-content: flex-end;
+    }
     .stButton > button {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
         font-size: 16px;
