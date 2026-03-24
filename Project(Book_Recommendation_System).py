@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-
 import warnings
+
 warnings.filterwarnings('ignore')
 
 @st.cache_data
@@ -42,33 +42,17 @@ def load_and_prepare_data():
 final_filtered_df, cosine_sim_df = load_and_prepare_data()
 
 def get_top_similar_books(book_title, n=10):
-    # Check if the book and user exist in our data
     if book_title not in cosine_sim_df.index:
         return "Book not found in the database."
     
-    # Get the similarity scores for the given book
     similar_scores = cosine_sim_df[book_title]
-    
-    # Sort the books by similarity score and return the top n (excluding the book itself)
     similar_books = similar_scores.sort_values(ascending=False)[1:n+1]
     return similar_books
-
-# Function to get book suggestions based on user input
-def get_book_suggestions(input_text):
-    return final_filtered_df[final_filtered_df['title'].str.contains(input_text, case=False, na=False)]['title'].unique().tolist()
-
-# Initialize session state for recommendations
-if 'recommendations' not in st.session_state:
-    st.session_state.recommendations = None
-if 'recommended_book' not in st.session_state:
-    st.session_state.recommended_book = None
-if 'recommended_num' not in st.session_state:
-    st.session_state.recommended_num = None
 
 # Streamlit app
 st.title('Book Recommendation System')
 
-# Define CSS for button styles and other formatting tweaks
+# Updated CSS with Horizontal Scrolling for Titles
 st.markdown("""
     <style>
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
@@ -96,19 +80,30 @@ st.markdown("""
     .stButton > button:hover {
         background-color: #45a049;
     }
-    .stSelectbox > div > div {
-        font-size: 14px;
-    }
-    .stNumberInput > div > div > input {
-        font-size: 14px;
-    }
     .book-info {
         line-height: 1.2;
         margin-bottom: 15px;
     }
-    .book-title {
-        margin-bottom: 30px;
+    
+    /* NEW: Horizontal Scroll styling for the Title */
+    .scroll-title {
+        display: block;
+        font-size: 16px;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
     }
+    /* Styling the scrollbar for the title */
+    .scroll-title::-webkit-scrollbar {
+        height: 6px;
+    }
+    .scroll-title::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 10px;
+    }
+
     .author-info {
         margin-top: 5px;
         font-size: 12px;
@@ -126,9 +121,6 @@ st.markdown("""
         display: block;
         margin: 0 auto;
     }
-    .spacer {
-        margin-bottom: 15px;
-    }
     hr {
         border: none !important;
         border-top: 10px solid #333 !important;
@@ -136,7 +128,6 @@ st.markdown("""
         margin-bottom: 25px !important;
         opacity: 1 !important;
     }
-    /* Updated .book-column for frame styling */
     .book-column {
         position: relative;
         padding: 20px;
@@ -160,15 +151,19 @@ st.markdown("""
 st.markdown("<p class='subheader'>Let Us Help You Choose Your Next Book!</p>", unsafe_allow_html=True)
 st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
 
-# Create a selectbox for book title with autocomplete
 all_books = final_filtered_df['title'].unique().tolist()
-# Use index=None and placeholder to create a true informative hint that isn't a selectable value
 book_title = st.selectbox('Enter a book title:', all_books, index=None, placeholder="Choose or enter a book title...", key='book_title')
 
 num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
 
+if 'recommendations' not in st.session_state:
+    st.session_state.recommendations = None
+if 'recommended_book' not in st.session_state:
+    st.session_state.recommended_book = None
+if 'recommended_num' not in st.session_state:
+    st.session_state.recommended_num = None
+
 if st.button('Recommend books'):
-    # Since index=None, book_title will be None if the user hasn't selected anything
     if book_title:
         similar_books = get_top_similar_books(book_title, num_recommendations)
         st.session_state.recommendations = similar_books
@@ -176,11 +171,8 @@ if st.button('Recommend books'):
         st.session_state.recommended_num = num_recommendations
     else:
         st.session_state.recommendations = None
-        st.session_state.recommended_book = None
-        st.session_state.recommended_num = None
         st.write("Please enter a book title.")
 
-# Display recommendations from session state
 if st.session_state.recommendations is not None:
     similar_books = st.session_state.recommendations
     rec_book = st.session_state.recommended_book
@@ -192,7 +184,6 @@ if st.session_state.recommendations is not None:
         st.markdown(f"<div style='font-size:15px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
         st.write("")
         
-        # Display books in rows with images, horizontal lines, and framed sections
         for i in range(0, len(similar_books), 3):
             cols = st.columns(3)
             for j in range(3):
@@ -203,7 +194,7 @@ if st.session_state.recommendations is not None:
                         st.markdown(f"""
                         <div class='book-column'>
                             <div class='book-info'>
-                                <strong>{i + j + 1}. {book}</strong><br>
+                                <div class='scroll-title'>{i + j + 1}. {book}</div>
                                 <div class='author-info' style='margin-left: 10px;'>by {book_info['Book-Author']}</div>
                                 <div class='year-info'>{book_info['Year-Of-Publication']}</div>
                             </div>
@@ -211,13 +202,7 @@ if st.session_state.recommendations is not None:
                         </div>
                         """, unsafe_allow_html=True)
             if i < len(similar_books) - 3:
-                st.markdown("<br>", unsafe_allow_html=True)
-                st.markdown("<hr>", unsafe_allow_html=True)
-                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("<br><hr><br>", unsafe_allow_html=True)
 
-        # Add extra space between books and final image
-        st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
-        st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
-        
-        # Display the final images
+        st.markdown("<div class='extra-space'></div><div class='extra-space'></div>", unsafe_allow_html=True)
         st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
