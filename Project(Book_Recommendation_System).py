@@ -50,7 +50,7 @@ def get_top_similar_books(book_title, n=10):
     return similar_books
 
 # Streamlit app
-st.title('Book Recommendation System')
+st.markdown("<h1 style='font-size: 40px;'>Book Recommendation System</h1>", unsafe_allow_html=True)
 
 # Updated CSS with Horizontal Scrolling for Titles
 st.markdown("""
